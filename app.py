@@ -9,7 +9,10 @@ app = Flask(__name__)
 
 # 1. BACA DATA EXCEL
 # Pastikan nama file ini sudah sesuai dengan yang ada di foldermu
-nama_file_excel = 'hasil_scraping_kompas (1).xlsx' 
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+nama_file_excel = os.path.join(BASE_DIR, 'hasil_scraping_kompas (1).xlsx')
 
 try:
     df = pd.read_excel(nama_file_excel)
