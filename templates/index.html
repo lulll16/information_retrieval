@@ -3,148 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mesin Pencari Berita Kompas</title>
+    <title>Mesin Pencari Berita</title>
 
     <style>
+        :root {
+            --bg: #f3f6fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --purple: #7c3aed;
+            --border: #e5e7eb;
+            --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            color: #222;
+            background: var(--bg);
+            color: var(--text);
         }
 
         .container {
-            width: 90%;
-            max-width: 1000px;
+            width: min(1100px, 92%);
             margin: 0 auto;
-            padding: 35px 0;
+            padding: 35px 0 60px;
         }
 
-        .judul {
+        .header {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 28px;
         }
 
-        .judul h1 {
-            margin-bottom: 8px;
+        .header h1 {
+            margin: 0;
+            font-size: 34px;
+            color: var(--primary);
         }
 
-        .judul p {
-            margin-top: 0;
-            color: #666;
+        .header p {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 15px;
         }
 
-        .box-pencarian {
-            background: white;
-            padding: 25px;
-            border-radius: 14px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            margin-bottom: 25px;
+        .search-box {
+            background: var(--card);
+            padding: 24px;
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
         }
 
-        .form-grid {
+        .search-form {
             display: grid;
-            grid-template-columns: 1fr 220px 130px;
-            gap: 12px;
+            grid-template-columns: 1fr 200px 150px;
+            gap: 14px;
             align-items: end;
         }
 
         label {
-            font-weight: bold;
             display: block;
+            font-weight: bold;
             margin-bottom: 8px;
+            font-size: 14px;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+            padding: 13px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
             font-size: 15px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
         }
 
         button {
-            padding: 12px;
+            padding: 13px 16px;
             border: none;
-            border-radius: 8px;
-            background: #1f6feb;
+            border-radius: 12px;
+            background: var(--primary);
             color: white;
             font-weight: bold;
             font-size: 15px;
             cursor: pointer;
+            transition: 0.2s;
         }
 
         button:hover {
-            background: #185abc;
+            background: var(--primary-dark);
+            transform: translateY(-1px);
         }
 
-        .btn-download {
-            background: #198754;
-            margin-bottom: 20px;
+        .section-title {
+            margin: 28px 0 14px;
         }
 
-        .btn-download:hover {
-            background: #146c43;
+        .section-title h2 {
+            margin: 0;
+            font-size: 22px;
         }
 
-        .info {
-            color: #555;
-            margin-bottom: 15px;
+        .section-title p {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 14px;
         }
 
-        .hasil-card {
-            background: white;
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            background: var(--card);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .metric-card .label {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-card .value {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 12px 0;
+        }
+
+        .metric-card.precision .value {
+            color: var(--green);
+        }
+
+        .metric-card.recall .value {
+            color: var(--orange);
+        }
+
+        .metric-card.f1 .value {
+            color: var(--purple);
+        }
+
+        .bar {
+            width: 100%;
+            height: 9px;
+            background: #edf2f7;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            width: var(--value);
+        }
+
+        .precision .bar-fill {
+            background: var(--green);
+        }
+
+        .recall .bar-fill {
+            background: var(--orange);
+        }
+
+        .f1 .bar-fill {
+            background: var(--purple);
+        }
+
+        .result-info {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 14px 18px;
+            color: var(--muted);
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+        }
+
+        .result-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .result-card {
+            background: var(--card);
+            border-radius: 18px;
             padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
         }
 
-        .hasil-card h3 {
-            margin-top: 0;
-            margin-bottom: 8px;
+        .result-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--primary);
         }
 
-        .hasil-card a {
-            color: #1f6feb;
+        .result-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .result-card h3 {
+            margin: 0 0 8px;
+            font-size: 19px;
+            line-height: 1.4;
+        }
+
+        .result-card h3 a {
+            color: var(--text);
             text-decoration: none;
         }
 
-        .hasil-card a:hover {
-            text-decoration: underline;
+        .result-card h3 a:hover {
+            color: var(--primary);
+        }
+
+        .rank-badge {
+            background: #eff6ff;
+            color: var(--primary);
+            border: 1px solid #bfdbfe;
+            padding: 7px 11px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: bold;
+            white-space: nowrap;
         }
 
         .meta {
-            color: #666;
+            color: var(--muted);
             font-size: 14px;
             margin-bottom: 10px;
         }
 
-        .skor {
+        .content {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .similarity {
             display: inline-block;
-            background: #eef4ff;
-            color: #1f6feb;
-            padding: 6px 10px;
-            border-radius: 8px;
-            font-weight: bold;
+            background: #eef2ff;
+            color: var(--primary);
+            padding: 8px 11px;
+            border-radius: 999px;
             font-size: 13px;
+            font-weight: bold;
         }
 
-        .kosong {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
+        .empty {
+            background: var(--card);
+            padding: 28px;
+            border-radius: 18px;
             text-align: center;
-            color: #666;
+            color: var(--muted);
+            box-shadow: var(--shadow);
         }
 
-        @media (max-width: 750px) {
-            .form-grid {
+        @media (max-width: 800px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics {
                 grid-template-columns: 1fr;
             }
 
             button {
                 width: 100%;
+            }
+
+            .header h1 {
+                font-size: 27px;
+            }
+
+            .result-top {
+                flex-direction: column;
             }
         }
     </style>
@@ -152,80 +315,133 @@
 
 <body>
     <div class="container">
-        <div class="judul">
-            <h1>Mesin Pencari Berita Kompas</h1>
-            <p>Pencarian berita menggunakan metode TF-IDF dan Cosine Similarity</p>
+        <div class="header">
+            <h1>Mesin Pencari Berita</h1>
+            <p>
+                Cari berita berdasarkan query, lalu sistem menampilkan ranking dokumen,
+                nilai similarity, Precision, Recall, dan F1 Score.
+            </p>
         </div>
 
-        <div class="box-pencarian">
-            <form method="POST" action="/">
-                <div class="form-grid">
-                    <div>
-                        <label for="query">Masukkan kata kunci</label>
-                        <input
-                            type="text"
-                            id="query"
-                            name="query"
-                            placeholder="Contoh: pendidikan, ekonomi, politik"
-                            value="{{ query_user }}"
-                            required
-                        >
-                    </div>
+        {% if pesan_error_data %}
+            <div class="empty">
+                {{ pesan_error_data }}
+            </div>
+        {% endif %}
 
-                    <div>
-                        <label for="jumlah_berita">Jumlah berita</label>
-                        <select id="jumlah_berita" name="jumlah_berita">
-                            <option value="5" {% if jumlah_berita == 5 %}selected{% endif %}>5 berita</option>
-                            <option value="10" {% if jumlah_berita == 10 %}selected{% endif %}>10 berita</option>
-                            <option value="20" {% if jumlah_berita == 20 %}selected{% endif %}>20 berita</option>
-                            <option value="30" {% if jumlah_berita == 30 %}selected{% endif %}>30 berita</option>
-                            <option value="50" {% if jumlah_berita == 50 %}selected{% endif %}>50 berita</option>
-                            <option value="75" {% if jumlah_berita == 75 %}selected{% endif %}>75 berita</option>
-                            <option value="100" {% if jumlah_berita == 100 %}selected{% endif %}>100 berita</option>
-                        </select>
-                    </div>
+        <div class="search-box">
+            <form method="POST" action="/" class="search-form">
+                <div>
+                    <label for="query">Masukkan Query</label>
+                    <input
+                        type="text"
+                        id="query"
+                        name="query"
+                        placeholder="Contoh: politik, ekonomi, polisi, pendidikan"
+                        value="{{ query_user }}"
+                        required
+                    >
+                </div>
 
-                    <button type="submit">Cari</button>
+                <div>
+                    <label for="jumlah_berita">Jumlah Berita</label>
+                    <select id="jumlah_berita" name="jumlah_berita">
+                        <option value="5" {% if jumlah_berita == 5 %}selected{% endif %}>5 berita</option>
+                        <option value="10" {% if jumlah_berita == 10 %}selected{% endif %}>10 berita</option>
+                        <option value="20" {% if jumlah_berita == 20 %}selected{% endif %}>20 berita</option>
+                        <option value="30" {% if jumlah_berita == 30 %}selected{% endif %}>30 berita</option>
+                        <option value="50" {% if jumlah_berita == 50 %}selected{% endif %}>50 berita</option>
+                        <option value="75" {% if jumlah_berita == 75 %}selected{% endif %}>75 berita</option>
+                        <option value="100" {% if jumlah_berita == 100 %}selected{% endif %}>100 berita</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button type="submit" name="mode" value="cari">Cari Berita</button>
                 </div>
             </form>
         </div>
 
+        {% if evaluasi %}
+            <div class="section-title">
+                <h2>Hasil Evaluasi</h2>
+                <p>Evaluasi sistem berdasarkan query: <b>"{{ query_user }}"</b></p>
+            </div>
+
+            <div class="metrics">
+                <div class="metric-card precision">
+                    <div class="label">Precision</div>
+                    <div class="value">{{ evaluasi.precision }}</div>
+                    <div class="bar">
+                        <div class="bar-fill" style="--value: {{ evaluasi.precision_pct }}%;"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card recall">
+                    <div class="label">Recall</div>
+                    <div class="value">{{ evaluasi.recall }}</div>
+                    <div class="bar">
+                        <div class="bar-fill" style="--value: {{ evaluasi.recall_pct }}%;"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card f1">
+                    <div class="label">F1 Score</div>
+                    <div class="value">{{ evaluasi.f1 }}</div>
+                    <div class="bar">
+                        <div class="bar-fill" style="--value: {{ evaluasi.f1_pct }}%;"></div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         {% if hasil_pencarian is not none %}
             {% if hasil_pencarian %}
-                <p class="info">
-                    Ditemukan {{ hasil_pencarian|length }} berita untuk kata kunci
+                <div class="section-title">
+                    <h2>Ranking Dokumen</h2>
+                    <p>Dokumen diurutkan berdasarkan nilai similarity tertinggi.</p>
+                </div>
+
+                <div class="result-info">
+                    Menampilkan <b>{{ hasil_pencarian|length }}</b> hasil pencarian untuk query
                     <b>"{{ query_user }}"</b>.
-                    Pilihan jumlah berita: <b>{{ jumlah_berita }}</b>.
-                </p>
+                </div>
 
-                <form method="POST" action="/download">
-                    <input type="hidden" name="query" value="{{ query_user }}">
-                    <input type="hidden" name="jumlah_berita" value="{{ jumlah_berita }}">
-                    <button type="submit" class="btn-download">Download Hasil ke Excel</button>
-                </form>
+                <div class="result-list">
+                    {% for item in hasil_pencarian %}
+                        <div class="result-card">
+                            <div class="result-top">
+                                <div>
+                                    <h3>
+                                        <a href="{{ item.url }}" target="_blank">
+                                            {{ item.judul }}
+                                        </a>
+                                    </h3>
 
-                {% for item in hasil_pencarian %}
-                    <div class="hasil-card">
-                        <h3>
-                            <a href="{{ item.url }}" target="_blank">
-                                {{ item.judul }}
-                            </a>
-                        </h3>
+                                    <div class="meta">
+                                        ID Dokumen: {{ item.nomor }} |
+                                        Waktu: {{ item.waktu }}
+                                    </div>
+                                </div>
 
-                        <div class="meta">
-                            Waktu: {{ item.waktu }}
+                                <div class="rank-badge">
+                                    Rank #{{ item.rank }}
+                                </div>
+                            </div>
+
+                            <div class="content">
+                                {{ item.konten }}
+                            </div>
+
+                            <span class="similarity">
+                                Similarity: {{ item.skor }}
+                            </span>
                         </div>
-
-                        <p>{{ item.konten }}</p>
-
-                        <span class="skor">
-                            Skor Kemiripan: {{ item.skor }}
-                        </span>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             {% else %}
-                <div class="kosong">
-                    Tidak ada berita yang cocok dengan kata kunci
+                <div class="empty">
+                    Tidak ada berita yang cocok dengan query
                     <b>"{{ query_user }}"</b>.
                 </div>
             {% endif %}
